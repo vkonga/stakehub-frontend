@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import ClipLoader from 'react-spinners/ClipLoader'; 
 import './index.css';
 
 const OrderTables = () => {
   const [pendingOrders, setPendingOrders] = useState([]);
   const [completedOrders, setCompletedOrders] = useState([]);
+  const [loading, setLoading] = useState(true); 
 
   const fetchOrders = async () => {
     try {
@@ -19,8 +21,10 @@ const OrderTables = () => {
 
       setPendingOrders(pendingData);
       setCompletedOrders(completedData);
+      setLoading(false); 
     } catch (error) {
       console.error('Error fetching orders:', error);
+      setLoading(false); 
     }
   };
 
@@ -29,10 +33,10 @@ const OrderTables = () => {
   }, []);
 
   const renderPendingOrders = () => (
-    <table style={{ width: "80%",marginTop:"30px",marginLeft:"30px",marginRight:"20px" }}>
+    <table style={{ width: "80%", marginTop: "30px", marginLeft: "30px", marginRight: "20px" }}>
       <thead>
         <tr>
-          <th style={{textAlign:"center"}} colSpan={4}><h2>Pending Orders Table</h2></th>
+          <th style={{ textAlign: "center" }} colSpan={4}><h2>Pending Orders Table</h2></th>
         </tr>
         <tr>
           <th className='buyer'>Buyer Qty</th>
@@ -55,10 +59,10 @@ const OrderTables = () => {
   );
 
   const renderCompletedOrders = () => (
-    <table  style={{ width: "80%",marginTop:"30px",marginLeft:"30px",marginRight:"20px" }}>
+    <table style={{ width: "80%", marginTop: "30px", marginLeft: "30px", marginRight: "20px" }}>
       <thead>
         <tr>
-          <th style={{textAlign:"center"}} colSpan={2}><h2>Completed Orders Table</h2></th>
+          <th style={{ textAlign: "center" }} colSpan={2}><h2>Completed Orders Table</h2></th>
         </tr>
         <tr>
           <th>Price</th>
@@ -78,8 +82,16 @@ const OrderTables = () => {
 
   return (
     <div>
-      {renderPendingOrders()}
-      {renderCompletedOrders()}
+      {loading ? ( 
+        <div style={{ textAlign: "center", marginTop: "50px" }}>
+          <ClipLoader color={"#123abc"} loading={loading} size={150} />
+        </div>
+      ) : (
+        <>
+          {renderPendingOrders()}
+          {renderCompletedOrders()}
+        </>
+      )}
     </div>
   );
 };
